@@ -3,12 +3,11 @@ import time
 import numpy as np
 from nearest_neighbor import nearest_neighbor
 
-def nearest_neighbor_2opt(matrix):
+def two_opt(matrix, tour, cost):
 
-    tour, cost = nearest_neighbor(matrix)
     n = len(tour)
-    
     improved = True
+    
     while improved:
         
         improved = False
@@ -30,6 +29,11 @@ def nearest_neighbor_2opt(matrix):
                 break
 
 
+    return tour, cost
+
+def nearest_neighbor_2opt(matrix):
+    tour, cost = nearest_neighbor(matrix)
+    tour, cost = two_opt(matrix, tour, cost)
     return tour, cost
 
 if __name__ == "__main__":

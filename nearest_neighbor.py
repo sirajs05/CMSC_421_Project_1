@@ -5,7 +5,7 @@ import numpy as np
 def nearest_neighbor(matrix):
     
     n = matrix.shape[0]
-    visited = False * n
+    visited = [False] * n
     tour = [0]
     visited[0] = True
     current = 0
