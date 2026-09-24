@@ -21,7 +21,7 @@ def hill_climbing(matrix, num_restarts):
             node1, node2 = random.sample(range(n), 2)
 
             test_list = random_perm_list.copy()
-            test_list[node1], test_list[node2] = random_perm_list[node1], random_perm_list[node2]
+            test_list[node1], test_list[node2] = random_perm_list[node2], random_perm_list[node1]
 
             current_cost = 0
             for j in range(n):
