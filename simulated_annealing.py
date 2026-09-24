@@ -34,9 +34,7 @@ def simulated_annealing(matrix, alpha, init_temp, max_iters):
 
         else:
 
-            score = 1 / current_cost
-            score_prime = 1 / candidate_cost
-            probability_func = math.exp((score_prime - score) / t)
+            probability_func = math.exp((current_cost - candidate_cost) / t)
             
             if random.random() < probability_func:
 
