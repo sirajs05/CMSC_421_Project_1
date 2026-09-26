@@ -3,16 +3,21 @@ import time
 import random
 import numpy as np
 
-
+# Order Crossover implementation of the Genetic Algorithm
 def order_crossover(parent1, parent2):
     
     n = len(parent1)
 
+    # Cut points range from 1 to n so that cut2 can reach n itself
+    # Ensure cuts are different and order
     cut1, cut2 = random.sample(range(1,n+1), 2)
     cut1, cut2 = min(cut1, cut2), max(cut1, cut2)
+
+    # Place children relative to cuts made from the parent1 state
     child = [None]*n
     child[cut1:cut2] = parent1[cut1:cut2]
 
+    # Fill positions starting from end of second cut to end, then go back to start to fill the rest of the positions if necessary
     fill_positions = list(range(cut2, n)) + list(range(0, cut1))
     read_order = list(range(cut2, n)) + list(range(0, cut2))
 
@@ -31,8 +36,12 @@ def order_crossover(parent1, parent2):
 
     return child
 
+# Maintains a population of size pop_size complete tours
+# Each generation pop_size children are created by crossover, parent selection is uniform random
+# Each child is mutated by mut_chance, after all children are created, they are sorted including parents by cost
 def genetic_algorithm(matrix, mut_chance, pop_size, num_gens):
 
+    # Initial population, all random permutations
     n = matrix.shape[0]
     population = []
 
@@ -42,12 +51,16 @@ def genetic_algorithm(matrix, mut_chance, pop_size, num_gens):
     for gen in range(num_gens):
         children = []
 
+        # Create exactly pop_size children in this generation so the combined parent+child pool is
+        # 2*pop_size, before elitism trims the list
         for _ in range(pop_size):
             parent1_idx, parent2_idx = random.sample(range(pop_size), 2)
             parent1, parent2 = population[parent1_idx], population[parent2_idx]
 
             child = order_crossover(parent1, parent2)
 
+            # Mutation will swap two cities directly in child, no check to see if it improves cost
+            # Pure, random chance
             probability_check = random.random()
 
             if(probability_check < mut_chance):
@@ -57,6 +70,8 @@ def genetic_algorithm(matrix, mut_chance, pop_size, num_gens):
             
             children.append(child)
 
+        # Use elitism to trim down list of children and parents
+        # For next generation of children to be made from this new population
         combined = population + children
 
         scored = []
@@ -70,6 +85,7 @@ def genetic_algorithm(matrix, mut_chance, pop_size, num_gens):
 
         scored.sort(key=lambda pair: pair[1])
 
+        # Best tour and cost based on the first node in scored list
         population = [pair[0] for pair in scored[:pop_size]]
         best_tour, best_cost = scored[0]
 
@@ -81,6 +97,7 @@ if __name__ == "__main__":
         print("Need matrix file, and hyperparamter mutation chance, population, and number of generations")
         sys.exit(1)
 
+    # 
     matrix = np.loadtxt(sys.argv[1])
     mut_chance = float(sys.argv[2])
     pop_size = int(sys.argv[3])

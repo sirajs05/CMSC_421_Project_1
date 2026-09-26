@@ -3,19 +3,25 @@ import time
 import random
 import numpy as np
 
+# Start with random permutation of complete tour, make swaps to find more efficient solutions
+# If no improvements are made after a certain amount (function of n), restart with another random permutation
 def hill_climbing(matrix, num_restarts):
     
+    # Hold best tour and cost
     n = matrix.shape[0]
     best_tour = None
     best_cost = float("inf")
 
+    # Loop num_restart times, with new, random, permutation for tour
     for _ in range(num_restarts):
 
         random_perm_list = random.sample(list(range(n)), n)
         
+        # Store times there is no improvement, make no_improvement check scale with n
         no_improvement_count = 0
         max_no_improvement = n * 10
 
+        # Check for improvements based on swaps
         while no_improvement_count < max_no_improvement:
 
             node1, node2 = random.sample(range(n), 2)
@@ -40,6 +46,8 @@ def hill_climbing(matrix, num_restarts):
                 no_improvement_count += 1
         
 
+        # Calculate current cost against best cost, if better, update
+        # Outside loop, calculate fresh to ensure no stray values tamper with true cost
         current_cost = 0
         for j in range(n):
             current_cost += matrix[random_perm_list[j], random_perm_list[(j+1)%n]]
@@ -50,12 +58,15 @@ def hill_climbing(matrix, num_restarts):
     
     return best_tour, best_cost
 
+# Load matrix, start timers, end timers when Hill Climbing returns to calculate actual computing time
+
 if __name__ == "__main__":
     
     if len(sys.argv) != 3:
         print("Need matrix file, and hyperparamter num_restarts")
         sys.exit(1)
 
+    # Get matrix, enfore types for second arg
     matrix = np.loadtxt(sys.argv[1])
     num_restarts = int(sys.argv[2])
 

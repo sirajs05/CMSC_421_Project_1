@@ -2,19 +2,24 @@ import sys
 import time
 import numpy as np
 
+#  Greedy Nearest Neighbor construction heuristic for TSP
 def nearest_neighbor(matrix):
     
+    # Get city count, track visited cities, and start tour at city 0 (arbitrarly picked)
     n = matrix.shape[0]
     visited = [False] * n
     tour = [0]
     visited[0] = True
     current = 0
 
+    # Visit every remaining city exactly once
     for _ in range(n-1):
         
+        # Placeholders to be changed
         best_next = None
         best_dist = float("inf")
         
+        # Scan every city, among the unvisited ones keep the closest one to our position
         for city in range(n):
             
             if not visited[city] and matrix[current, city] < best_dist:
@@ -25,12 +30,14 @@ def nearest_neighbor(matrix):
         visited[best_next] = True
         current = best_next
     
+    # Sum cost of every edge in tour, including the edge last visited to starting city
     cost = 0
     for i in range(n):
         cost += matrix[tour[i], tour[(i+1)%n]]
     
     return tour, cost
 
+# Load matrix, start timers, end timers when Nearest Neighbors returns to calculate actual computing time
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
