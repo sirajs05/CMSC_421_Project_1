@@ -31,7 +31,7 @@ class TSP(Problem):
 
         return list(unvisited)
     
-    # Appends chosen action to state, whether tour is done (simply returns state with added action of start cor there are still cities to visit
+    # Appends chosen action to state, whether tour is done (simply returns state with added action of start city) or there are still cities to visit
     def result(self, state, action):
         return state + (action,)
     

@@ -97,7 +97,7 @@ if __name__ == "__main__":
         print("Need matrix file, and hyperparamter mutation chance, population, and number of generations")
         sys.exit(1)
 
-    # 
+    # Load matrix
     matrix = np.loadtxt(sys.argv[1])
     mut_chance = float(sys.argv[2])
     pop_size = int(sys.argv[3])

@@ -59,7 +59,6 @@ def hill_climbing(matrix, num_restarts):
     return best_tour, best_cost
 
 # Load matrix, start timers, end timers when Hill Climbing returns to calculate actual computing time
-
 if __name__ == "__main__":
     
     if len(sys.argv) != 3:
